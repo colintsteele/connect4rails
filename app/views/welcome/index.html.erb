@@ -1,4 +1,17 @@
 <h1>Hello Heroku</h1>
 <p>I hope this works!</p>
 
+<div id="board" style="background-color: black; width: 100px; height: 100px"></div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#board').on('click', function(){
+      console.log('cool');
+      $.ajax({
+        url: 'welcome/mytest',
+        type: 'GET'
+      })
+    });
+  });
+</script>
 
