@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'pry'
 gem 'rspec-rails'
 gem 'rails', '4.2.8'
 gem 'sass-rails', '~> 5.0'
