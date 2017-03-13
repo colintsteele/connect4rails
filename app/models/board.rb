@@ -33,4 +33,12 @@ class Board
     end
   end
 
+  def find_bottom_row
+    @height.times do  |row|
+      return (row - 1) if @grid[column][row]
+    end
+    @height - 1
+  end
+
+
 end

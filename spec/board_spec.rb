@@ -39,4 +39,9 @@ describe 'dropping discs' do
     @board = Board.instance
   end
 
+  it 'should be able to find the bottom row' do
+    bottom_row = @board.find_bottom_row(0)
+    expect(bottom_row).to eq(6)
+  end
+
 end

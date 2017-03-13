@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 gem 'pry'
 gem 'rspec-rails'
 gem 'rails', '4.2.8'
