@@ -7,6 +7,9 @@ class Board
   def initialize(height = 7, width = 7)
     @height = height
     @width = width
+    @player_one = Player.new(1)
+    @player_two = Player.new(2)
+    @current_player = [@player_one, @player_two].sample
     @grid = Array.new(height){ Array.new(width) }
   end
 
@@ -44,15 +47,22 @@ class Board
     @height - 1
   end
 
-  def drop_disc(column, player)
+  def swap_player
+    if @current_player == @player_one
+      @current_player = @player_two
+    else
+      @current_player = @player_one
+    end
+  end
+
+  def drop_disc(column, player = @current_player)
     bottom_row = find_bottom_row(column)
     if bottom_row == -1
       return nil
     else
       @grid[column][bottom_row] = player
     end
+    swap_player
   end
-
-
 
 end
