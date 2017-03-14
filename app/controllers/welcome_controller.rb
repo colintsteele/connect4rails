@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
   def index
     @board = Board.instance
-    @canvas_scale = 50
+    @canvas_scale = 50;
   end
 
   def drop_disc

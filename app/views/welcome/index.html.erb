@@ -12,17 +12,11 @@
     scale = <%= @board.height * @canvas_scale %>;
     return (scale/7) * point + (scale/14);
   };
-  drawCircle = function(context,x,y){
+  drawCircle = function(color, context,x,y){
     context.beginPath();
-    radius = 10;
-    context.arc(
-        x,
-        y,
-        24,
-        0,
-        (2 * Math.PI),
-        false);
-    context.fillStyle = 'green';
+    radius = <%= @canvas_scale%>/2;
+    context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
+    context.fillStyle = color;
     context.fill();
     context.lineWidth = 5;
   };
@@ -30,15 +24,21 @@
     for(i=0;i<7;i++){
       for(j=0;j<7;j++) {
         console.log(offset(i));
-        drawCircle(context, offset(i), offset(j));
+        drawCircle('green', context, offset(i), offset(j));
       }
     }
   };
-
+  drawDisc = function(color, context, x, y){
+     drawCircle(color, context, offset(x), offset(y));
+  };
   $(document).ready(function(){
     var canvas = document.getElementById('canboard');
     var context = canvas.getContext('2d');
     drawSlots(context);
+    drawDisc('blue', context, 2, 4);
+
+
+
     $('#canboard').on('click', function(){
 
       $.ajax({
@@ -46,7 +46,7 @@
         type: 'GET',
         success: function(result){
           console.log("get success");
-          drawCircle(context);
+          //drawCircle(context);
         },
         error: function(result, thing){
           console.log(result);
