@@ -1,9 +1,10 @@
 class Player
-  attr_reader :number, :discs
+  attr_reader :number, :discs, :color
 
-  def initialize(number)
+  def initialize(number, color)
     @discs = []
     @number = number
+    @color = color
   end
 
   def add_disc(column, row)

@@ -30,7 +30,7 @@
             url: 'board/drop_disc?column=<%=i%>',
             type: 'GET',
             success: function(result){
-              drawDisc('purple', result.coords[0], result.coords[1]);
+              drawDisc(result.color, result.coords[0], result.coords[1]);
             }
           })
         }).appendTo($('#board'));
@@ -61,7 +61,7 @@
     for(i=0;i<7;i++){
       for(j=0;j<7;j++) {
         console.log(offset(i));
-        drawCircle('white', offset(i), offset(j));
+        drawCircle('green', offset(i), offset(j));
       }
     }
   };

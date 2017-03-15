@@ -7,8 +7,8 @@ class Board
   def initialize(height = 7, width = 7)
     @height = height
     @width = width
-    @player_one = Player.new(1)
-    @player_two = Player.new(2)
+    @player_one = Player.new(1, 'red')
+    @player_two = Player.new(2, 'blue')
     @current_player = [@player_one, @player_two].sample
     @grid = Array.new(height){ Array.new(width) }
   end
@@ -60,7 +60,7 @@ class Board
     return nil if bottom_row < 0
     @grid[column][bottom_row] = player
     @current_player.add_disc(column, bottom_row)
-    {player: @current_player, coords: [column, bottom_row]}
+    {color: @current_player.color, coords: [column, bottom_row]}
   end
 
 end

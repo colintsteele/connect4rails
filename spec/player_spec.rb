@@ -4,12 +4,16 @@ require_relative '../app/models/player'
 describe 'Player' do
 
   before :all do
-    @player = Player.new(1)
+    @player = Player.new(1, 'red')
     @board = Board.instance
   end
 
   it 'should have a number' do
     expect(@player.number).not_to be_nil
+  end
+
+  it 'should have a color' do
+    expect(@player.color).not_to be_nil
   end
 
   it 'should keep track of its discs' do
