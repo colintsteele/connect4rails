@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root 'welcome#index'
+  root 'board#index'
 
-  get 'welcome/index'
-  get 'welcome/drop_disc'
+  get 'board/index'
+  get 'board/drop_disc'
 end
