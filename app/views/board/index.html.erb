@@ -12,6 +12,7 @@
 
   <script>
     $(document).ready(function(){
+      //create buttons for dropping discs into columns
       <% 7.times do |i| %>
         $('<button/>', {
           id: 'drop_slot<%=i%>',
@@ -31,7 +32,7 @@
             success: function(result){
               console.log('hello from <%=i%>')
             }
-          }).on('mouseover');
+          })
         }).appendTo($('#board'));
       <%end%>
     });
@@ -44,6 +45,7 @@
     scale = <%= @board.height * @canvas_scale %>;
     return (scale/7) * point + (scale/14);
   };
+
   drawCircle = function(color, context,x,y){
     context.beginPath();
     radius = <%= @canvas_scale%>/2;
@@ -52,6 +54,7 @@
     context.fill();
     context.lineWidth = 5;
   };
+
   drawSlots = function(context){
     for(i=0;i<7;i++){
       for(j=0;j<7;j++) {
@@ -60,29 +63,34 @@
       }
     }
   };
+
   drawDisc = function(color, context, x, y){
      drawCircle(color, context, offset(x), offset(y));
   };
+
+  drawDiscs = function(context){
+    $.ajax({
+      url: 'board/get_discs',
+      type: 'GET',
+      success: function(result){
+        console.dir(result);
+        result.player1.forEach(function(disc){
+          drawDisc('red',context, disc[0],disc[1]);
+        });
+        result.player2.forEach(function(disc){
+          drawDisc('blue',context, disc[0],disc[1]);
+        });
+
+
+      }
+    })
+  };
+
   $(document).ready(function(){
     var canvas = document.getElementById('canboard');
     var context = canvas.getContext('2d');
     drawSlots(context);
-
-    $('#canboard').on('click', function(){
-
-      $.ajax({
-        url: 'welcome/drop_disc',
-        type: 'GET',
-        success: function(result){
-          console.log("get success");
-          //drawCircle(context);
-        },
-        error: function(result, thing){
-          console.log(result);
-        }
-      });
-
-    });
+    drawDiscs(context);
   });
 </script>
 

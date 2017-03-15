@@ -2,7 +2,7 @@ require 'singleton'
 
 class Board
   include Singleton
-  attr_reader :height, :width, :grid, :current_player
+  attr_reader :height, :width, :grid, :current_player, :player_one, :player_two
 
   def initialize(height = 7, width = 7)
     @height = height
@@ -62,6 +62,7 @@ class Board
     else
       @grid[column][bottom_row] = player
     end
+    @current_player.add_disc(column, bottom_row)
     swap_player
   end
 
