@@ -22,7 +22,9 @@ class Board
   end
 
   def reset
-    @grid = Array.new(height){ Array.new(width) }
+    @grid = Array.new(@height){ Array.new(@width) }
+    @player_one.reset
+    @player_two.reset
   end
 
   def print_board

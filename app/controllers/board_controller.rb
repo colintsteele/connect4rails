@@ -6,6 +6,7 @@ class BoardController < ApplicationController
 
   def reset
     Board.instance.reset
+    Board.instance.print_board
   end
 
   def drop_disc

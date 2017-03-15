@@ -34,20 +34,29 @@ offset = function(point){
   return (scale/7) * point + (scale/14);
 };
 
+reset = function(){
+  $.ajax({
+    url: 'board/reset',
+    type: 'GET',
+    success: function(){
+      drawSlots();
+      drawDiscs();
+    }
+
+  })
+};
+
 drawDiscs = function(){
   $.ajax({
     url: 'board/get_discs',
     type: 'GET',
     success: function(result){
-      console.dir(result);
       result.player1.forEach(function(disc){
         drawDisc('red', disc[0],disc[1]);
       });
       result.player2.forEach(function(disc){
         drawDisc('blue', disc[0],disc[1]);
       });
-
-
     }
   })
 };

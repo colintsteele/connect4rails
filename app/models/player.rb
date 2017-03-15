@@ -11,4 +11,8 @@ class Player
     @discs << [column, row]
   end
 
+  def reset
+    @discs =[]
+  end
+
 end
