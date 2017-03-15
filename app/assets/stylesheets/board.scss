@@ -1,0 +1,43 @@
+// Place all the styles related to the Welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#progress-board {
+  list-style-type: none;
+  ul {
+    list-style-type: none;
+    padding: 5px 15px;
+  }
+  .done:before {
+    content: '\2713';
+    color: green;
+  }
+
+  .in-progress:before {
+    content: '\2026';
+    color: blue;
+    position: relative;
+    top: -3px;
+  }
+
+  .tbd:before {
+    content: '\274C';
+    color: red
+  }
+
+}
+
+.drop_slot {
+  background-color : #FF0;
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  position: relative;
+  top: 0px;
+}
+
+#canboard {
+  background-color: #FF0;
+  position: absolute;
+  top: 50px;
+}

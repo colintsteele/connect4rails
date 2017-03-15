@@ -4,10 +4,7 @@
 <div id="board" style="position:relative;">
   <canvas id="canboard"
           height="<%=(@board.height*@canvas_scale)%>"
-          width="<%=(@board.width*@canvas_scale)%>"
-          style="background-color: #FF0;
-              position: absolute;
-              top:50px">
+          width="<%=(@board.width*@canvas_scale)%>">
   </canvas>
 
   <script>
@@ -16,15 +13,7 @@
       <% 7.times do |i| %>
         $('<button/>', {
           id: 'drop_slot<%=i%>',
-          class: 'drop_slot',
-          css: {
-            'background-color' : '#FF0',
-            'height' : '50px',
-            'width' : '50px',
-            'display' : 'inline-block',
-            'position' : 'relative',
-            'top' : '0px'
-          }
+          class: 'drop_slot'
         }).on('click', function(){
           $.ajax({
             url: 'board/drop_disc?column=<%=i%>',
@@ -40,56 +29,23 @@
 
 </div>
 
+<div id="progress-board"
+     style="border-color: black;
+     border-style: solid;
+     border-radius: 2px;
+     padding: 2px;
+     float: right">
+
+  <ul>
+    <li class="done">Deploy</li>
+    <li class="done">Disc logic</li>
+    <li class="done">UI</li>
+    <li class="in-progress">Game logic</li>
+    <li class="tbd">Win conditions</li>
+    <li class="tbd">Database saves</li>
+    <li class="tbd">AI</li>
+  </ul>
+
+</div>
 <script type="text/javascript">
-  offset = function(point){
-    scale = <%= @board.height * @canvas_scale %>;
-    return (scale/7) * point + (scale/14);
-  };
-
-  drawCircle = function(color, x, y){
-    var canvas = document.getElementById('canboard');
-    var context = canvas.getContext('2d');
-    context.beginPath();
-    radius = <%= @canvas_scale%>/2;
-    context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
-    context.fillStyle = color;
-    context.fill();
-    context.lineWidth = 5;
-  };
-
-  drawSlots = function(){
-    for(i=0;i<7;i++){
-      for(j=0;j<7;j++) {
-        console.log(offset(i));
-        drawCircle('green', offset(i), offset(j));
-      }
-    }
-  };
-
-  drawDisc = function(color, x, y){
-     drawCircle(color, offset(x), offset(y));
-  };
-
-  drawDiscs = function(){
-    $.ajax({
-      url: 'board/get_discs',
-      type: 'GET',
-      success: function(result){
-        console.dir(result);
-        result.player1.forEach(function(disc){
-          drawDisc('red', disc[0],disc[1]);
-        });
-        result.player2.forEach(function(disc){
-          drawDisc('blue', disc[0],disc[1]);
-        });
-
-
-      }
-    })
-  };
-
-  $(document).ready(function(){
-    drawSlots();
-    drawDiscs();
-  });
 </script>
