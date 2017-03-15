@@ -5,6 +5,7 @@ describe 'Connect 4 board' do
 
   before :all do
     @board = Board.instance
+    @player = @board.player_one
   end
 
   after :each do
@@ -17,11 +18,6 @@ describe 'Connect 4 board' do
       expect(@board).not_to be_nil
     end
 
-    it 'should have a `height` x `width` grid' do
-      expect(@board.grid.size).to eq(@board.width)
-      expect(@board.grid.first.size).to eq(@board.height)
-    end
-
     it 'should be able to traverse the grid' do
       count = 0
       @board.through_grid do
@@ -31,11 +27,10 @@ describe 'Connect 4 board' do
     end
 
     it 'should be an entirely empty grid' do
-      not_nil = false
-      @board.through_grid do |c, r|
-        not_nil = true unless @board.grid[c][r].nil?
-      end
-      expect(not_nil).to be_falsey
+      p1_discs = @board.player_one.discs
+      p2_discs = @board.player_two.discs
+      expect(p1_discs).to be_empty
+      expect(p2_discs).to be_empty
     end
 
   end
@@ -47,21 +42,24 @@ describe 'Connect 4 board' do
       expect(bottom_row).to eq(6)
     end
 
+    it 'should be able to see what where player\'s discs are' do
+      @board.drop_disc(0, @player)
+      expect(@board.grid(0, @board.height-1)).not_to be_nil
+    end
+
     it 'should put a disc in the bottom row' do
-      player = 1
-      column = 0
-      @board.drop_disc(column, player)
-      expect(@board.grid[column][@board.height-1]).to eq(1)
+      @board.drop_disc(0)
+      expect(@board.grid(0, @board.height-1).class).to be_truthy
     end
 
     it 'should find the second-to-last row after one drop' do
-      @board.drop_disc(0, 1)
+      @board.drop_disc(0)
       expect(@board.find_bottom_row(0)).to eq(5)
     end
 
     it 'should not put a disc in a full column' do
       @board.height.times do
-        @board.drop_disc(0, 1)
+        @board.drop_disc(0)
       end
       expect(@board.drop_disc(0, 1)).to be_nil
     end

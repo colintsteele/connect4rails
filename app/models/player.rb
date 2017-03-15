@@ -15,6 +15,11 @@ class Player
     @discs =[]
   end
 
+  def detect_four(direction, x, y)
+    #check right
+    #then check left w/ count from right
+  end
+
   def count_owned_adjacent(direction, x, y, count=0)
     case
       when :right
