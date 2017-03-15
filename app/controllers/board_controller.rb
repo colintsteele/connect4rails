@@ -18,5 +18,4 @@ class BoardController < ApplicationController
     render json: {'player1' => Board.instance.player_one.discs,
                   'player2' => Board.instance.player_two.discs}
   end
-
 end
