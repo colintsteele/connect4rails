@@ -78,6 +78,7 @@ describe 'Connect 4 board' do
     it 'should switch players after the first drop' do
       previous_player = @board.current_player
       @board.drop_disc(1)
+      @board.swap_player
       expect(@board.current_player).not_to be(previous_player)
     end
 

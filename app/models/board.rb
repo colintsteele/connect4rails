@@ -57,14 +57,10 @@ class Board
 
   def drop_disc(column, player = @current_player)
     bottom_row = find_bottom_row(column)
-    if bottom_row == -1
-      return nil
-    else
-      @grid[column][bottom_row] = player
-    end
+    return nil if bottom_row < 0
+    @grid[column][bottom_row] = player
     @current_player.add_disc(column, bottom_row)
-    swap_player
-    [column, bottom_row]
+    {player: @current_player, coords: [column, bottom_row]}
   end
 
 end

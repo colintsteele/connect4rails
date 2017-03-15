@@ -30,7 +30,7 @@
             url: 'board/drop_disc?column=<%=i%>',
             type: 'GET',
             success: function(result){
-              console.log('hello from <%=i%>')
+              drawDisc('purple', result.coords[0], result.coords[1]);
             }
           })
         }).appendTo($('#board'));
