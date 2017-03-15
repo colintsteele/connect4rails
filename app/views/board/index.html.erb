@@ -1,0 +1,50 @@
+<h1>Hello Heroku</h1>
+<p>I hope this works!</p>
+
+<canvas id="canboard"
+        style="background-color: #222;
+            width:<%=(@board.height*@canvas_scale)%>px;
+            height:<%=(@board.height*@canvas_scale)%>px;">
+</canvas>
+
+
+
+<script type="text/javascript">
+  drawCircle = function(context){
+    context.beginPath();
+    x = 50;
+    y = 50;
+    radius = 10;
+    context.arc(
+        x,
+        y,
+        7,
+        0,
+        (2 * Math.PI),
+        false);
+    context.fillStyle = 'green';
+    context.fill();
+    context.lineWidth = 5;
+  };
+
+  $(document).ready(function(){
+    $('#canboard').on('click', function(){
+
+      $.ajax({
+        url: 'welcome/drop_disc',
+        type: 'GET',
+        success: function(result, thing){
+          console.log("get success");
+        },
+        error: function(result, thing){
+          console.log(result);
+          canvas = document.getElementById('canboard');
+          context = canvas.getContext('2d');
+          drawCircle(context);
+        }
+      });
+
+    });
+  });
+</script>
+
