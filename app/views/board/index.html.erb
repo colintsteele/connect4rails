@@ -46,7 +46,9 @@
     return (scale/7) * point + (scale/14);
   };
 
-  drawCircle = function(color, context,x,y){
+  drawCircle = function(color, x, y){
+    var canvas = document.getElementById('canboard');
+    var context = canvas.getContext('2d');
     context.beginPath();
     radius = <%= @canvas_scale%>/2;
     context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
@@ -55,30 +57,30 @@
     context.lineWidth = 5;
   };
 
-  drawSlots = function(context){
+  drawSlots = function(){
     for(i=0;i<7;i++){
       for(j=0;j<7;j++) {
         console.log(offset(i));
-        drawCircle('green', context, offset(i), offset(j));
+        drawCircle('white', offset(i), offset(j));
       }
     }
   };
 
-  drawDisc = function(color, context, x, y){
-     drawCircle(color, context, offset(x), offset(y));
+  drawDisc = function(color, x, y){
+     drawCircle(color, offset(x), offset(y));
   };
 
-  drawDiscs = function(context){
+  drawDiscs = function(){
     $.ajax({
       url: 'board/get_discs',
       type: 'GET',
       success: function(result){
         console.dir(result);
         result.player1.forEach(function(disc){
-          drawDisc('red',context, disc[0],disc[1]);
+          drawDisc('red', disc[0],disc[1]);
         });
         result.player2.forEach(function(disc){
-          drawDisc('blue',context, disc[0],disc[1]);
+          drawDisc('blue', disc[0],disc[1]);
         });
 
 
@@ -87,9 +89,7 @@
   };
 
   $(document).ready(function(){
-    var canvas = document.getElementById('canboard');
-    var context = canvas.getContext('2d');
-    drawSlots(context);
-    drawDiscs(context);
+    drawSlots();
+    drawDiscs();
   });
 </script>
