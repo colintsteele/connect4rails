@@ -15,4 +15,33 @@ class Player
     @discs =[]
   end
 
+  def count_owned_adjacent(direction, x, y, count=0)
+    case
+      when :right
+        x += 1
+      when :left
+        x -= 1
+      when :down
+        y -= 1
+      when :diagonal_315
+        y -= 1
+        x += 1
+      when :diagonal_45
+        x += 1
+        y += 1
+      when :diagonal_135
+        x -= 1
+        y += 1
+      when :diagonal_225
+        x -= 1
+        y -= 1
+    end
+
+    if @discs.include? [x, y]
+      count_owned_adjacent(direction, x, y, count + 1)
+    else
+      count
+    end
+  end
+
 end

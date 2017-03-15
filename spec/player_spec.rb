@@ -1,5 +1,6 @@
 require_relative '../app/models/board'
 require_relative '../app/models/player'
+require 'spec_helper'
 
 describe 'Player' do
 
@@ -22,5 +23,14 @@ describe 'Player' do
     end
     expect(@board.current_player.discs).not_to be_empty
   end
+
+  it 'should count adjacent slots' do
+    2.times do |i|
+      @board.drop_disc(i, 1)
+    end
+    owned_right = @board.player_one.count_owned_adjacent(:right, 0, 6)
+    expect(owned_right).to eq(2)
+  end
+
 
 end
