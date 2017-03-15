@@ -1,0 +1,59 @@
+/**
+ * Created by csteele2 on 3/15/17.
+ */
+console.log('hello from ap');
+
+var canvas_scale = 50;
+
+drawCircle = function(color, x, y){
+  var canvas = document.getElementById('canboard');
+  var context = canvas.getContext('2d');
+  context.beginPath();
+  radius = canvas_scale/2;
+  context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+};
+
+drawSlots = function(){
+  for(i=0;i<7;i++){
+    for(j=0;j<7;j++) {
+      console.log(offset(i));
+      drawCircle('green', offset(i), offset(j));
+    }
+  }
+};
+
+drawDisc = function(color, x, y){
+  drawCircle(color, offset(x), offset(y));
+};
+
+offset = function(point){
+  scale = 7 * canvas_scale;
+  return (scale/7) * point + (scale/14);
+};
+
+drawDiscs = function(){
+  $.ajax({
+    url: 'board/get_discs',
+    type: 'GET',
+    success: function(result){
+      console.dir(result);
+      result.player1.forEach(function(disc){
+        drawDisc('red', disc[0],disc[1]);
+      });
+      result.player2.forEach(function(disc){
+        drawDisc('blue', disc[0],disc[1]);
+      });
+
+
+    }
+  })
+};
+
+$(document).ready(function(){
+  drawSlots();
+  drawDiscs();
+});
+
