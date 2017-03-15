@@ -66,6 +66,11 @@ describe 'Connect 4 board' do
       expect(@board.drop_disc(0, 1)).to be_nil
     end
 
+    it 'should return the coordinates of the disc that was dropped' do
+      coord = @board.drop_disc(0)
+      expect(coord).not_to be_empty
+    end
+
   end
 
   context 'different players' do

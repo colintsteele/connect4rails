@@ -64,6 +64,7 @@ class Board
     end
     @current_player.add_disc(column, bottom_row)
     swap_player
+    [column, bottom_row]
   end
 
 end
