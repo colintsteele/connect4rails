@@ -1,11 +1,32 @@
 <h1>Hello Heroku</h1>
 <p>I hope this works!</p>
 
-<canvas id="canboard"
-        height="<%=(@board.height*@canvas_scale)%>"
-        width="<%=(@board.width*@canvas_scale)%>"
-        style="background-color: #FF0;">
-</canvas>
+<div id="board">
+  <canvas id="canboard"
+          height="<%=(@board.height*@canvas_scale)%>"
+          width="<%=(@board.width*@canvas_scale)%>"
+          style="background-color: #FF0;">
+  </canvas>
+
+  <script>
+    $(document).ready(function(){
+      <% 7.times do |i| %>
+        $('<div/>', {
+          id: 'drop_slot<%=i%>'
+        }).on('click', function(){
+          $.ajax({
+            url: 'welcome/drop_disc?<%=i%>',
+            type: 'GET',
+            success: function(result){
+              console.log('hello from <%=i%>')
+            }
+          });
+        }).appendTo($('#board'));
+      <%end%>
+    });
+  </script>
+
+</div>
 
 <script type="text/javascript">
   offset = function(point){
