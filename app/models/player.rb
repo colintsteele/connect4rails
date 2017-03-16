@@ -15,38 +15,39 @@ class Player
     @discs =[]
   end
 
-  def detect_four(direction, x, y)
-    #check right
-    #then check left w/ count from right
+  def detect_four(x, y)
+    [360, 315, 270, 225].each do |direction|
+      side_one = count_owned_adjacent(direction, x, y)
+      side_two = count_owned_adjacent(direction - 180, x, y)
+      return true if side_one + side_two >= 3
+    end
+    nil
   end
 
   def count_owned_adjacent(direction, x, y, count=0)
-    case
-      when :right
+    case direction
+      when 360
         x += 1
-      when :left
-        x -= 1
-      when :down
-        y -= 1
-      when :diagonal_315
-        y -= 1
-        x += 1
-      when :diagonal_45
+      when 315
         x += 1
         y += 1
-      when :diagonal_135
-        x -= 1
+      when 270 #consider a special condition for down, in which the current is always at the end
         y += 1
-      when :diagonal_225
+      when 225
+        y +=1
+        x -= 1
+      when 180
+        x -= 1
+      when 135
         x -= 1
         y -= 1
     end
-
     if @discs.include? [x, y]
       count_owned_adjacent(direction, x, y, count + 1)
     else
       count
     end
+
   end
 
 end
