@@ -18,14 +18,6 @@ describe 'Connect 4 board' do
       expect(@board).not_to be_nil
     end
 
-    it 'should be able to traverse the grid' do
-      count = 0
-      @board.through_grid do
-        count += 1
-      end
-      expect(count).to eq(@board.height * @board.width)
-    end
-
     it 'should be an entirely empty grid' do
       p1_discs = @board.player_one.discs
       p2_discs = @board.player_two.discs
@@ -47,6 +39,11 @@ describe 'Connect 4 board' do
       expect(@board.grid(0, @board.height-1)).not_to be_nil
     end
 
+    it 'should track most recent moves' do
+      @board.drop_disc(0)
+      expect(@board.last_disc).not_to be_nil
+    end
+
     it 'should put a disc in the bottom row' do
       @board.drop_disc(0)
       expect(@board.grid(0, @board.height-1).class).to be_truthy
@@ -64,12 +61,25 @@ describe 'Connect 4 board' do
       expect(@board.drop_disc(0)).to be_nil
     end
 
-    it 'should return the coordinates of the disc that was dropped' do
-      coord = @board.drop_disc(0)
-      expect(coord).not_to be_empty
+    it 'should record how many discs have been dropped' do
+      @board.drop_disc(0)
+      expect(@board.count).not_to eq(0)
     end
 
-    it 'should record how many discs have been dropped' do
+    it 'should declare a players win' do
+      @board.drop_disc(0)
+      @board.drop_disc(0)
+      @board.drop_disc(1)
+      @board.drop_disc(1)
+      @board.drop_disc(2)
+      @board.drop_disc(2)
+      @board.drop_disc(3)
+      @board.drop_disc(3)
+      expect(@board.check_game_over).not_to eq(:tie)
+      expect(@board.check_game_over).not_to be_falsey
+    end
+
+    it 'should declare a tie after all tiles are full' do
 
     end
 

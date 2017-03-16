@@ -2,7 +2,7 @@ require 'singleton'
 
 class Board
   include Singleton
-  attr_reader :height, :width, :current_player, :player_one, :player_two
+  attr_reader :height, :width, :current_player, :player_one, :player_two, :last_disc, :count
 
   def initialize(height = 7, width = 7)
     @count = 0
@@ -11,14 +11,6 @@ class Board
     @player_one = Player.new(1, 'red')
     @player_two = Player.new(2, 'blue')
     @current_player = [@player_one, @player_two].sample
-  end
-
-  def through_grid
-    @width.times do |column|
-      @height.times do |row|
-        yield(column, row)
-      end
-    end
   end
 
   def reset
@@ -71,13 +63,18 @@ class Board
     bottom_row = find_bottom_row(column)
     return nil if bottom_row < 0
     @current_player.add_disc(column, bottom_row)
-    {opponent: @current_player.opponent, color: @current_player.color, coords: [column, bottom_row]}
+    @last_disc = {player: @current_player, opponent: @current_player.opponent, color: @current_player.color, coords: [column, bottom_row]}
+    @count += 1
   end
 
-  def detect_completion
-    return :tie if (@board.player_one.discs.size + @board.player_two.discs.size) >= 49
-
-
+  def check_game_over
+    if @last_disc[:player].detect_win(@last_disc[:coords][0], @last_disc[:coords][1])
+      @last_disc[:player]
+    elsif count >= 49
+      :tie
+    else
+      false
+    end
   end
 
 end

@@ -47,7 +47,7 @@ context 'counting adjacent slots' do
     expect(owned_up_right).to eq(1)
   end
 
-  it 'should find a win here' do
+  it 'should find a connect 4 when present' do
     player = @board.current_player
     @board.drop_disc(0)
     @board.drop_disc(0)
@@ -59,6 +59,7 @@ context 'counting adjacent slots' do
     @board.drop_disc(3)
     expect(player.detect_win(3, 6)).to be_truthy
   end
+
 end
 
 
