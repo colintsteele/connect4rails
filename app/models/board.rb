@@ -5,6 +5,7 @@ class Board
   attr_reader :height, :width, :current_player, :player_one, :player_two
 
   def initialize(height = 7, width = 7)
+    @count = 0
     @height = height
     @width = width
     @player_one = Player.new(1, 'red')
@@ -23,6 +24,7 @@ class Board
   def reset
     @player_one.reset
     @player_two.reset
+    @count = 0
   end
 
   def print_board
@@ -65,13 +67,17 @@ class Board
     end
   end
 
-  #todo grid --
-  def drop_disc(column, player = @current_player)
+  def drop_disc(column)
     bottom_row = find_bottom_row(column)
     return nil if bottom_row < 0
-    player.add_disc(column, bottom_row)
-    swap_player
-    {color: player.color, coords: [column, bottom_row]}
+    @current_player.add_disc(column, bottom_row)
+    {opponent: @current_player.opponent, color: @current_player.color, coords: [column, bottom_row]}
+  end
+
+  def detect_completion
+    return :tie if (@board.player_one.discs.size + @board.player_two.discs.size) >= 49
+
+
   end
 
 end

@@ -15,7 +15,7 @@ class Player
     @discs =[]
   end
 
-  def detect_four(x, y)
+  def detect_win(x, y)
     [360, 315, 270, 225].each do |direction|
       side_one = count_owned_adjacent(direction, x, y)
       side_two = count_owned_adjacent(direction - 180, x, y)
@@ -41,6 +41,11 @@ class Player
       when 135
         x -= 1
         y -= 1
+      when 90
+        y -=1
+      when 45
+        y -=1
+        x +=1
     end
     if @discs.include? [x, y]
       count_owned_adjacent(direction, x, y, count + 1)
@@ -48,6 +53,14 @@ class Player
       count
     end
 
+  end
+
+  def opponent
+    if @number == 1
+      2
+    else
+      1
+    end
   end
 
 end

@@ -2,6 +2,9 @@
 <p>Press the buttons below to dropp discs onto the board.</p>
 
 <button onclick="reset()">Reset board</button>
+<span id="player-turn">player <%= @board.current_player.number %>'s turn</span>
+
+
 <div id="board" style="position:relative;">
   <canvas id="canboard"
           height="<%=(@board.height*@canvas_scale)%>"
@@ -21,6 +24,8 @@
             type: 'GET',
             success: function(result){
               drawDisc(result.color, result.coords[0], result.coords[1]);
+              console.dir(result);
+              $('#player-turn').text("player "+result.opponent+"'s turn");
             }
           })
         }).appendTo($('#board'));
