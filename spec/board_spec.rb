@@ -43,7 +43,7 @@ describe 'Connect 4 board' do
     end
 
     it 'should be able to see what where player\'s discs are' do
-      @board.drop_disc(0, @player)
+      @board.drop_disc(0)
       expect(@board.grid(0, @board.height-1)).not_to be_nil
     end
 
@@ -61,7 +61,7 @@ describe 'Connect 4 board' do
       @board.height.times do
         @board.drop_disc(0)
       end
-      expect(@board.drop_disc(0, 1)).to be_nil
+      expect(@board.drop_disc(0)).to be_nil
     end
 
     it 'should return the coordinates of the disc that was dropped' do
@@ -71,15 +71,5 @@ describe 'Connect 4 board' do
 
   end
 
-  context 'different players' do
-
-    it 'should switch players after the first drop' do
-      previous_player = @board.current_player
-      @board.drop_disc(1)
-      @board.swap_player
-      expect(@board.current_player).not_to be(previous_player)
-    end
-
-  end
 end
 
