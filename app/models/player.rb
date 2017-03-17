@@ -1,18 +1,18 @@
-class Player
-  attr_reader :number, :discs, :color
+require 'active_record'
 
-  def initialize(number, color)
-    @discs = []
-    @number = number
-    @color = color
-  end
+class Player < ActiveRecord::Base
+  has_many :discs
 
   def add_disc(column, row)
-    @discs << [column, row]
+    Disc.create(column: column, row: row, player_id: self.id)
+  end
+
+  def has_disc?(column, row)
+    true unless Disc.where(column: column, row: row, player_id: self.id).empty?
   end
 
   def reset
-    @discs =[]
+    Disc.where(player_id: self.id).delete_all
   end
 
   def detect_win(x, y)
@@ -24,31 +24,31 @@ class Player
     nil
   end
 
-  def count_owned_adjacent(direction, x, y, count=0)
+  def count_owned_adjacent(direction, column, row, count=0)
     case direction
       when 360
-        x += 1
+        column += 1
       when 315
-        x += 1
-        y += 1
+        column += 1
+        row += 1
       when 270 #consider a special condition for down, in which the current is always at the end
-        y += 1
+        row += 1
       when 225
-        y +=1
-        x -= 1
+        row +=1
+        column -= 1
       when 180
-        x -= 1
+        column -= 1
       when 135
-        x -= 1
-        y -= 1
+        column -= 1
+        row -= 1
       when 90
-        y -=1
+        row -=1
       when 45
-        y -=1
-        x +=1
+        row -=1
+        column +=1
     end
-    if @discs.include? [x, y]
-      count_owned_adjacent(direction, x, y, count + 1)
+    if has_disc?(column, row)
+      count_owned_adjacent(direction, column, row, count + 1)
     else
       count
     end
@@ -56,10 +56,10 @@ class Player
   end
 
   def opponent
-    if @number == 1
-      2
+    if self.id == 1
+      Player.last
     else
-      1
+      Player.first
     end
   end
 

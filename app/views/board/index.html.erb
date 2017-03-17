@@ -4,7 +4,7 @@
 <div id="winner"></div>
 
 <button onclick="reset()">Reset board</button>
-<span id="player-turn">player <%= @board.current_player.number %>'s turn</span>
+<span id="player-turn"><%= @board.current_player.id%> player's turn</span>
 
 
 <div id="board" style="position:relative;">
@@ -25,14 +25,15 @@
             url: 'board/drop_disc?column=<%=i%>',
             type: 'GET',
             success: function(result){
-              drawDisc(result.color, result.coords[0], result.coords[1]);
-              $('#player-turn').text("player "+result.opponent+"'s turn");
+              drawDisc(result.color, result.disc.column, result.disc.row);
+              console.log(result);
+              $('#player-turn').text(result.opponent+" player's turn");
               $.ajax({
                 url: 'board/check_game_over',
                 type: 'GET',
                 success: function(status){
                   if(status.winner != undefined) {
-                    if(confirm("Player "+status.winner+" has won!!  Press okay to reset the board"))
+                    if(confirm(status.winner+" player has won!!  Press okay to reset the board"))
                       reset();
                   } else if (status.tie == "true"){
                     if(confirm("Tie!!  Press okay to reset the board."))

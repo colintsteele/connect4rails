@@ -5,16 +5,12 @@ require 'spec_helper'
 describe 'Player' do
 
   before :all do
-    @player = Player.new(1, 'red')
+    @player = Player.new(color: 'red')
     @board = Board.instance
   end
 
   after :each do
     @board.reset
-  end
-
-  it 'should have a number' do
-    expect(@player.number).not_to be_nil
   end
 
   it 'should have a color' do

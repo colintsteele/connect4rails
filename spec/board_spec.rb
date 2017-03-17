@@ -19,10 +19,7 @@ describe 'Connect 4 board' do
     end
 
     it 'should be an entirely empty grid' do
-      p1_discs = @board.player_one.discs
-      p2_discs = @board.player_two.discs
-      expect(p1_discs).to be_empty
-      expect(p2_discs).to be_empty
+      expect(Disc.all).to be_empty
     end
 
   end
@@ -36,7 +33,7 @@ describe 'Connect 4 board' do
 
     it 'should be able to see what where player\'s discs are' do
       @board.drop_disc(0)
-      expect(@board.grid(0, @board.height-1)).not_to be_nil
+      expect(@board.slot_owner(0, @board.height-1)).not_to be_nil
     end
 
     it 'should track most recent moves' do
@@ -46,7 +43,7 @@ describe 'Connect 4 board' do
 
     it 'should put a disc in the bottom row' do
       @board.drop_disc(0)
-      expect(@board.grid(0, @board.height-1).class).to be_truthy
+      expect(@board.slot_owner(0, @board.height-1).class).to be_truthy
     end
 
     it 'should find the second-to-last row after one drop' do

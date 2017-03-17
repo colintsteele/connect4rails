@@ -49,11 +49,12 @@ drawDiscs = function(){
     url: 'board/get_discs',
     type: 'GET',
     success: function(result){
-      result.player1.forEach(function(disc){
-        drawDisc('red', disc[0],disc[1]);
+      console.dir(result);
+      result.p1_discs.forEach(function(disc){
+        drawDisc(result.p1_color, disc.column, disc.row);
       });
-      result.player2.forEach(function(disc){
-        drawDisc('blue', disc[0],disc[1]);
+      result.p2_discs.forEach(function(disc){
+        drawDisc(result.p2_color, disc.column, disc.row);
       });
     }
   })

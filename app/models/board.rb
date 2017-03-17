@@ -8,8 +8,8 @@ class Board
     @count = 0
     @height = height
     @width = width
-    @player_one = Player.new(1, 'red')
-    @player_two = Player.new(2, 'blue')
+    @player_one = Player.where(id: 1).first
+    @player_two = Player.where(id: 2).first
     @current_player = [@player_one, @player_two].sample
   end
 
@@ -19,34 +19,20 @@ class Board
     @count = 0
   end
 
-  def print_board
-    print "\n"
-    through_grid do |column, row|
-      case grid(row, column)
-        when @player_one
-          print("[X]")
-        when @player_two
-          print("[O]")
-        else
-          print("[-]")
-      end
-      print "\n" if row == width - 1
-    end
-  end
-
-  def grid(column, row)
-    if @player_one.discs.include?([column, row])
+  def slot_owner(column, row)
+    if @player_one.has_disc?(column, row)
       @player_one
-    elsif @player_two.discs.include?([column, row])
-      @player_two.discs.include?([column, row])
+    elsif @player_two.has_disc?(column, row)
+      @player_two
     else
       nil
     end
+
   end
 
   def find_bottom_row(column)
     @height.times do |row|
-      return (row - 1) if grid(column, row)
+      return (row - 1) if slot_owner(column, row)
     end
     @height - 1
   end

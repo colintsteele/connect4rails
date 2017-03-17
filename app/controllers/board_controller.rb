@@ -9,14 +9,16 @@ class BoardController < ApplicationController
   end
 
   def drop_disc
-    disc = Board.instance.drop_disc(params['column'].to_i)
-    render json: Board.instance.last_disc
-    Board.instance.swap_player unless disc.nil?
+    @board = Board.instance
+    return unless @board.drop_disc(params['column'].to_i)
+    render json: { 'disc' => Disc.last, 'color' => @board.current_player.color, 'opponent' => @board.current_player.opponent.color }
+    Board.instance.swap_player unless Disc.last.nil?
   end
 
   def get_discs
-    render json: {'player1' => Board.instance.player_one.discs,
-                  'player2' => Board.instance.player_two.discs}
+    # render json: {'player1' => Board.instance.player_one.discs,
+    #               'player2' => Board.instance.player_two.discs}
+    render json: {'p1_color' => Board.instance.player_one.color, 'p1_discs' => Disc.where(player_id: Board.instance.player_one.id), 'p2_color' => Board.instance.player_two.color, 'p2_discs' => Disc.where(player_id: Board.instance.player_two.id) }
   end
 
   def check_game_over
@@ -26,7 +28,7 @@ class BoardController < ApplicationController
     elsif !state
       render json: {}
     else
-      render json: {'winner' => state.number}
+      render json: {'winner' => state.id}
     end
   end
 
