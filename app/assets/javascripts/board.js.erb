@@ -49,7 +49,6 @@ drawDiscs = function(){
     url: 'board/get_discs',
     type: 'GET',
     success: function(result){
-      console.dir(result);
       result.p1_discs.forEach(function(disc){
         drawDisc(result.p1_color, disc.column, disc.row);
       });

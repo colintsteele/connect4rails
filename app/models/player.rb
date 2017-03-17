@@ -15,11 +15,11 @@ class Player < ActiveRecord::Base
     Disc.where(player_id: self.id).delete_all
   end
 
-  def detect_win(x, y)
+  def detect_win(x, y, win = 3)
     [360, 315, 270, 225].each do |direction|
       side_one = count_owned_adjacent(direction, x, y)
       side_two = count_owned_adjacent(direction - 180, x, y)
-      return true if side_one + side_two >= 3
+      return true if side_one + side_two >= win
     end
     nil
   end

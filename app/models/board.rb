@@ -4,13 +4,13 @@ class Board
   include Singleton
   attr_reader :height, :width, :current_player, :player_one, :player_two, :last_disc, :count
 
-  def initialize(height = 7, width = 7)
+  def initialize(height = 7, width = 7, computer = false)
     @count = 0
     @height = height
     @width = width
     @player_one = Player.where(id: 1).first
-    @player_two = Player.where(id: 2).first
-    @current_player = [@player_one, @player_two].sample
+    @player_two = Computer.where(id: 3).first
+    @current_player = @player_one
   end
 
   def reset
@@ -37,9 +37,22 @@ class Board
     @height - 1
   end
 
+  # def swap_player
+  #   if @current_player == @player_one
+  #     @current_player = @player_two
+  #   else
+  #     @current_player = @player_one
+  #   end
+  # end
+
   def swap_player
     if @current_player == @player_one
       @current_player = @player_two
+      unless check_game_over
+        @current_player.make_move
+        swap_player
+      end
+
     else
       @current_player = @player_one
     end
@@ -54,8 +67,8 @@ class Board
   end
 
   def check_game_over
-    if @last_disc[:player].detect_win(@last_disc[:coords][0], @last_disc[:coords][1])
-      @last_disc[:player]
+    if Disc.last.player.detect_win(Disc.last.column, Disc.last.row)
+      Disc.last.player
     elsif count >= 49
       :tie
     else

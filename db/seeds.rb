@@ -8,4 +8,5 @@
 
 Player.create(color: 'red')
 Player.create(color: 'blue')
+Computer.create(color: 'cyan')
 
