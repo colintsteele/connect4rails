@@ -5,63 +5,55 @@
 var canvas_scale = 50;
 
 drawCircle = function(color, x, y){
-  var canvas = document.getElementById('canboard');
-  var context = canvas.getContext('2d');
-  context.beginPath();
-  radius = canvas_scale/2;
-  context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
-  context.fillStyle = color;
-  context.fill();
-  context.lineWidth = 5;
+    var canvas = document.getElementById('canboard');
+    var context = canvas.getContext('2d');
+    context.beginPath();
+    radius = canvas_scale/2;
+    context.arc(x, y, radius - 1, 0, (2 * Math.PI), false);
+    context.fillStyle = color;
+    context.fill();
+    context.lineWidth = 5;
 };
 
 drawSlots = function(){
-  for(i=0;i<7;i++){
-    for(j=0;j<7;j++) {
-      drawCircle('green', offset(i), offset(j));
+    for(i=0;i<7;i++){
+        for(j=0;j<7;j++) {
+            drawCircle('green', offset(i), offset(j));
+        }
     }
-  }
 };
 
 drawDisc = function(color, x, y){
-  drawCircle(color, offset(x), offset(y));
+    drawCircle(color, offset(x), offset(y));
 };
 
 offset = function(point){
-  scale = 7 * canvas_scale;
-  return (scale/7) * point + (scale/14);
+    scale = 7 * canvas_scale;
+    return (scale/7) * point + (scale/14);
 };
 
 reset = function(){
-  $.ajax({
-    url: 'board/reset',
-    type: 'GET',
-    success: function(){
-      drawSlots();
-      drawDiscs();
-    }
-
-  })
+    $.get('board/reset', function(){
+        drawSlots();
+        drawDiscs();
+    });
 };
 
+
 drawDiscs = function(){
-  $.ajax({
-    url: 'board/get_discs',
-    type: 'GET',
-    success: function(result){
-      console.dir(result);
-      result.p1_discs.forEach(function(disc){
-        drawDisc(result.p1_color, disc.column, disc.row);
-      });
-      result.p2_discs.forEach(function(disc){
-        drawDisc(result.p2_color, disc.column, disc.row);
-      });
-    }
-  })
+    $.get('board/get_discs', function(result){
+        //todo shorten into one function
+        result.p1_discs.forEach(function(disc){
+            drawDisc(result.p1_color, disc.column, disc.row);
+        });
+        result.p2_discs.forEach(function(disc){
+            drawDisc(result.p2_color, disc.column, disc.row);
+        });
+    });
 };
 
 $(document).ready(function(){
-  drawSlots();
-  drawDiscs();
+    drawSlots();
+    drawDiscs();
 });
 

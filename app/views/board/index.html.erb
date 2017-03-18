@@ -21,40 +21,31 @@
           id: 'drop_slot<%=i%>',
           class: 'drop_slot'
         }).on('click', function(){
-          $.ajax({
-            url: 'board/drop_disc?column=<%=i%>',
-            type: 'GET',
-            success: function(result){
-              drawDisc(result.color, result.disc.column, result.disc.row);
-              console.log(result);
-              $('#player-turn').text(result.opponent+" player's turn");
-              $.ajax({
-                url: 'board/check_game_over',
-                type: 'GET',
-                success: function(status){
-                  if(status.winner != undefined) {
-                    if(confirm(status.winner+" player has won!!  Press okay to reset the board"))
-                      reset();
-                  } else if (status.tie == "true"){
-                    if(confirm("Tie!!  Press okay to reset the board."))
-                      reset();
-                  }
-                }
-              })
-            }
-          });
+            $.get('board/drop_disc?column=<%=i%>', function(result){
+                drawDisc(result.color, result.disc.column, result.disc.row);
+                $('#player-turn').text(result.opponent+" player's turn");
+                $.get('board/check_game_over', function(status){
+                    if(status.winner != undefined) {
+                        if(confirm(status.winner+" player has won!!  Press okay to reset the board"))
+                            reset();
+                    } else if (status.tie == "true"){
+                        if(confirm("Tie!!  Press okay to reset the board."))
+                            reset();
+                    }
+                });
+            });
         }).appendTo($('#board'));
-      <%end%>
+        <%end%>
     });
   </script>
 </div>
 
 <div id="progress-board"
      style="border-color: black;
-     border-style: solid;
-     border-radius: 2px;
-     padding: 2px;
-     float: right">
+         border-style: solid;
+         border-radius: 2px;
+         padding: 2px;
+         float: right">
 
   <ul>
     <li class="done">Deploy</li>
