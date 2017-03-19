@@ -1,7 +1,10 @@
 require 'pry'
 require 'rubygems'
+
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
+
+require 'rspec/rails'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -13,5 +16,7 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.infer_spec_type_from_file_location!
 
 end

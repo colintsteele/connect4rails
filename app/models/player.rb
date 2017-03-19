@@ -1,18 +1,13 @@
-require 'active_record'
-
 class Player < ActiveRecord::Base
+  belongs_to :board
   has_many :discs
 
-  def add_disc(column, row)
-    Disc.create(column: column, row: row, player_id: self.id)
+  def self.reset
+    Disc.where(player_id: self.id)
   end
 
   def has_disc?(column, row)
-    true unless Disc.where(column: column, row: row, player_id: self.id).empty?
-  end
-
-  def reset
-    Disc.where(player_id: self.id).delete_all
+    Disc.where(column: column, row: row).first.player == self
   end
 
   def detect_win(x, y)
@@ -53,14 +48,6 @@ class Player < ActiveRecord::Base
       count
     end
 
-  end
-
-  def opponent
-    if self.id == 1
-      Player.last
-    else
-      Player.first
-    end
   end
 
 end
