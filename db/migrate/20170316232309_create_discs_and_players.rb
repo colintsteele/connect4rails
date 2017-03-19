@@ -1,7 +1,6 @@
 class CreateDiscsAndPlayers < ActiveRecord::Migration
   def change
     create_table :boards do |t|
-      t.references :current_player, references: :players
     end
 
     create_table :discs do |t|

@@ -4,36 +4,24 @@
 <div id="winner"></div>
 
 <button onclick="reset()">Reset board</button>
-<span id="player-turn"><%= @board.current_player.id%> player's turn</span>
+<span id="player-turn">player's turn</span>
 
 
 <div id="board" style="position:relative;">
   <canvas id="canboard"
-          height="<%=(@board.height*@canvas_scale)%>"
-          width="<%=(@board.width*@canvas_scale)%>">
+          height="350"
+          width="350">
   </canvas>
 
   <script>
     $(document).ready(function(){
-      //create buttons for dropping discs into columns
       <% 7.times do |i| %>
         $('<button/>', {
           id: 'drop_slot<%=i%>',
           class: 'drop_slot'
         }).on('click', function(){
-            $.get('board/drop_disc?column=<%=i%>', function(result){
-                drawDisc(result.color, result.disc.column, result.disc.row);
-                $('#player-turn').text(result.opponent+" player's turn");
-                $.get('board/check_game_over', function(status){
-                    if(status.winner != undefined) {
-                        if(confirm(status.winner+" player has won!!  Press okay to reset the board"))
-                            reset();
-                    } else if (status.tie == "true"){
-                        if(confirm("Tie!!  Press okay to reset the board."))
-                            reset();
-                    }
-                });
-            });
+            drop_click(<%=i%>);
+            computer_move();
         }).appendTo($('#board'));
         <%end%>
     });

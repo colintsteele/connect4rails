@@ -39,18 +39,40 @@ reset = function(){
     });
 };
 
-
 drawDiscs = function(){
-    $.get('board/get_discs', function(result){
-        //todo shorten into one function
-        result.p1_discs.forEach(function(disc){
-            drawDisc(result.p1_color, disc.column, disc.row);
-        });
-        result.p2_discs.forEach(function(disc){
-            drawDisc(result.p2_color, disc.column, disc.row);
+    $.get('board/discs', function(result){
+        result.forEach(function(disc){
+           drawDisc(disc.color, disc.column, disc.row)
         });
     });
 };
+
+drop_click = function(i){
+    $.get('board/drop_disc?column='+i, function(response){
+        disc = response[0];
+        win = response[1];
+        drawDisc(disc.color, disc.column, disc.row);
+        if(win != null){
+            if(confirm(win.color + " player has won!! Press okay to reset the board")){
+                reset();
+            };
+        }
+    });
+};
+
+computer_move = function(){
+    $.get('computer/make_move', function(response){
+        console.log(response)
+        disc = response[0];
+        win = response[1];
+        drawDisc(disc.color, disc.column, disc.row);
+        if(win != null){
+            if(confirm(win.color + " player has won!! Press okay to reset the board")){
+                reset();
+            };
+        }
+    });
+}
 
 $(document).ready(function(){
     drawSlots();

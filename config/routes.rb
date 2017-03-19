@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   get 'board/drop_disc'
   get 'board/reset'
   get 'board/check_game_over'
-  get 'board/get_discs'
+  get 'board/discs'
+  get 'computer/make_move'
 end
