@@ -4,57 +4,36 @@
 <div id="winner"></div>
 
 <button onclick="reset()">Reset board</button>
-<span id="player-turn"><%= @board.current_player.id%> player's turn</span>
+<span id="player-turn">player's turn</span>
 
 
 <div id="board" style="position:relative;">
   <canvas id="canboard"
-          height="<%=(@board.height*@canvas_scale)%>"
-          width="<%=(@board.width*@canvas_scale)%>">
+          height="350"
+          width="350">
   </canvas>
 
   <script>
     $(document).ready(function(){
-      //create buttons for dropping discs into columns
       <% 7.times do |i| %>
         $('<button/>', {
           id: 'drop_slot<%=i%>',
           class: 'drop_slot'
         }).on('click', function(){
-          $.ajax({
-            url: 'board/drop_disc?column=<%=i%>',
-            type: 'GET',
-            success: function(result){
-              drawDisc(result.color, result.disc.column, result.disc.row);
-              console.log(result);
-              $('#player-turn').text(result.opponent+" player's turn");
-              $.ajax({
-                url: 'board/check_game_over',
-                type: 'GET',
-                success: function(status){
-                  if(status.winner != undefined) {
-                    if(confirm(status.winner+" player has won!!  Press okay to reset the board"))
-                      reset();
-                  } else if (status.tie == "true"){
-                    if(confirm("Tie!!  Press okay to reset the board."))
-                      reset();
-                  }
-                }
-              })
-            }
-          });
+            drop_click(<%=i%>);
+            computer_move();
         }).appendTo($('#board'));
-      <%end%>
+        <%end%>
     });
   </script>
 </div>
 
 <div id="progress-board"
      style="border-color: black;
-     border-style: solid;
-     border-radius: 2px;
-     padding: 2px;
-     float: right">
+         border-style: solid;
+         border-radius: 2px;
+         padding: 2px;
+         float: right">
 
   <ul>
     <li class="done">Deploy</li>
@@ -62,8 +41,8 @@
     <li class="done">UI</li>
     <li class="done">Game logic</li>
     <li class="done">Win conditions</li>
-    <li class="in-progress">Database saves</li>
-    <li class="tbd">AI</li>
+    <li class="done">Database saves</li>
+    <li class="done">AI</li>
   </ul>
 
 </div>
