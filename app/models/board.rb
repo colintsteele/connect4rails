@@ -1,66 +1,71 @@
-require 'singleton'
+class Board < ActiveRecord::Base
+  has_many :discs, through: :players
 
-class Board
-  include Singleton
-  attr_reader :height, :width, :current_player, :player_one, :player_two, :last_disc, :count
+  attr_reader :player1, :player2, :current_player_id
 
-  def initialize(height = 7, width = 7)
-    @count = 0
-    @height = height
-    @width = width
-    @player_one = Player.where(id: 1).first
-    @player_two = Player.where(id: 2).first
-    @current_player = [@player_one, @player_two].sample
+  def set_players
+    players = Player.where(board: self)
+    @player1 = players.first
+    @player2 = players.last
+    @current_player_id = players.first.id
+  end
+
+  def swap_players
+    if @current_player_id == @player1.id
+      @current_player_id = @player2.id
+    else
+      @current_player_id = @player1.id
+    end
   end
 
   def reset
-    @player_one.reset
-    @player_two.reset
-    @count = 0
+    self.player1.discs.delete_all
+    self.player2.discs.delete_all
   end
 
-  def slot_owner(column, row)
-    if @player_one.has_disc?(column, row)
-      @player_one
-    elsif @player_two.has_disc?(column, row)
-      @player_two
+  def find_open_row(column)
+    column_discs = Disc.where(column: column)
+    if column_discs.empty?
+      6
+    elsif column_discs.size == 7
+      nil
+    else
+      column_discs.minimum('row') - 1
+    end
+  end
+
+  def add_disc(column)
+    set_players if @current_player_id.nil?
+    unless (row = find_open_row(column)).nil?
+      Disc.create(column: column, row: row, player_id: @current_player_id)
+      swap_players
     else
       nil
     end
-
   end
 
-  def find_bottom_row(column)
-    @height.times do |row|
-      return (row - 1) if slot_owner(column, row)
-    end
-    @height - 1
+  def slot_owner(column, row)
+    Disc.where(column: column, row: row).first.player
   end
 
-  def swap_player
-    if @current_player == @player_one
-      @current_player = @player_two
-    else
-      @current_player = @player_one
-    end
-  end
-
-  def drop_disc(column)
-    bottom_row = find_bottom_row(column)
-    return nil if bottom_row < 0
-    @current_player.add_disc(column, bottom_row)
-    @last_disc = {player: @current_player, opponent: @current_player.opponent, color: @current_player.color, coords: [column, bottom_row]}
-    @count += 1
-  end
-
+  #move to controller
   def check_game_over
-    if @last_disc[:player].detect_win(@last_disc[:coords][0], @last_disc[:coords][1])
-      @last_disc[:player]
-    elsif count >= 49
+    disc = Disc.last
+    if disc.player.detect_win(disc.column, disc.row)
+      disc.player
+    elsif Disc.count == 49
       :tie
     else
-      false
+      nil
     end
+    #
+    # if @last_disc[:player].detect_win(@last_disc[:coords][0], @last_disc[:coords][1])
+    #   @last_disc[:player]
+    # elsif count >= 49
+    #   :tie
+    # else
+    #   false
+    # end
   end
 
 end
