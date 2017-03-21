@@ -50,8 +50,13 @@ drawDiscs = function(){
 };
 
 win = function(winner){
+  if(winner != undefined) {
     $('#winner').text(winner + " player has won!!").show();
     $('.drop_slot').hide();
+  } else {
+    $('.drop_slot').show();
+    $('.player-turn').text('Player\s turn');
+  }
 };
 
 drop_click = function(i){
@@ -60,10 +65,10 @@ drop_click = function(i){
     $.get('board/drop_disc?column='+i, function(response){
         disc = response[0];
         winner = response[1];
-        drawDisc(disc.color, disc.column, disc.row);
-        if(winner != null){
-            win(winner.color)
-        }
+        if(disc != undefined)
+          drawDisc(disc.color, disc.column, disc.row);
+        if(winner != undefined)
+          win(winner.color);
     }).then(function(){
         computer_move();
     });
@@ -72,14 +77,18 @@ drop_click = function(i){
 computer_move = function(){
     $.get('computer/make_move', function(response){
         console.log(response);
-        disc = response[0];
-        winner = response[1];
-        drawDisc(disc.color, disc.column, disc.row);
-        if(winner != null){
+        if (response != null ) {
+          disc = response[0];
+          winner = response[1];
+          if (disc != undefined)
+            drawDisc(disc.color, disc.column, disc.row);
+          if (winner != null) {
+            console.log(winner);
             win(winner.color);
-        } else {
+          } else {
             $('#player-turn').text('Player\'s turn');
             $('.drop_slot').show();
+          }
         }
     });
 };

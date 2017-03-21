@@ -11,6 +11,8 @@ class BoardController < ApplicationController
     if @board.add_disc(params['column'].to_i)
       game_over = Board.first.check_game_over
       render json: [Disc.last, game_over]
+    else
+      nil
     end
   end
 
