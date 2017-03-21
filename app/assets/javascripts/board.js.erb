@@ -33,6 +33,8 @@ offset = function(point){
 };
 
 reset = function(){
+    $('#winner').text('').hide();
+    $('.drop_slot').show();
     $.get('board/reset', function(){
         drawSlots();
         drawDiscs();
@@ -47,16 +49,20 @@ drawDiscs = function(){
     });
 };
 
+win = function(winner){
+    $('#winner').text(winner + " player has won!!").show();
+    $('.drop_slot').hide();
+};
+
 drop_click = function(i){
     $('.drop_slot').hide();
+    $('#player-turn').text('Computer\'s turn');
     $.get('board/drop_disc?column='+i, function(response){
         disc = response[0];
-        win = response[1];
+        winner = response[1];
         drawDisc(disc.color, disc.column, disc.row);
-        if(win != null){
-            if(confirm(win.color + " player has won!! Press okay to reset the board")){
-                reset();
-            };
+        if(winner != null){
+            win(winner.color)
         }
     }).then(function(){
         computer_move();
@@ -67,18 +73,16 @@ computer_move = function(){
     $.get('computer/make_move', function(response){
         console.log(response);
         disc = response[0];
-        win = response[1];
+        winner = response[1];
         drawDisc(disc.color, disc.column, disc.row);
-        if(win != null){
-            if(confirm(win.color + " player has won!! Press okay to reset the board")){
-                reset();
-            };
+        if(winner != null){
+            win(winner.color);
+        } else {
+            $('#player-turn').text('Player\'s turn');
+            $('.drop_slot').show();
         }
-    }).then(function(){
-        $('.drop_slot').show();
-        console.log('shown');
     });
-}
+};
 
 $(document).ready(function(){
     drawSlots();
