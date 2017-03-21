@@ -30,7 +30,6 @@ class Player < ActiveRecord::Base
     else
       count
     end
-
   end
 
 end

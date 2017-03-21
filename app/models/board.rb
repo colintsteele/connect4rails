@@ -30,11 +30,9 @@ class Board < ActiveRecord::Base
   end
 
   def add_disc(column)
-    unless (row = find_open_row(column)).nil?
-      Disc.create(column: column, row: row, player_id: current_player_id)
-    else
-      nil
-    end
+    row = find_open_row(column)
+    return nil if row.nil?
+    Disc.create(column: column, row: row, player_id: current_player_id)
   end
 
   def slot_owner(column, row)

@@ -48,6 +48,7 @@ drawDiscs = function(){
 };
 
 drop_click = function(i){
+    $('.drop_slot').hide();
     $.get('board/drop_disc?column='+i, function(response){
         disc = response[0];
         win = response[1];
@@ -62,7 +63,7 @@ drop_click = function(i){
 
 computer_move = function(){
     $.get('computer/make_move', function(response){
-        console.log(response)
+        console.log(response);
         disc = response[0];
         win = response[1];
         drawDisc(disc.color, disc.column, disc.row);
@@ -71,6 +72,9 @@ computer_move = function(){
                 reset();
             };
         }
+    }).then(function(){
+        $('.drop_slot').show();
+        console.log('shown');
     });
 }
 
