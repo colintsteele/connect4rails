@@ -1,11 +1,12 @@
 require_relative '../app/models/board'
 require_relative '../app/models/player'
+require 'spec_helper'
 
 describe 'Connect 4 board' do
 
   before :all do
-    @board = Board.instance
-    @player = @board.player_one
+    @board = Board.first
+    @player = Player.first
   end
 
   after :each do
@@ -27,51 +28,51 @@ describe 'Connect 4 board' do
   context 'dropping discs' do
 
     it 'should be able to find the bottom row' do
-      bottom_row = @board.find_bottom_row(0)
+      bottom_row = @board.find_open_row(0)
       expect(bottom_row).to eq(6)
     end
 
     it 'should be able to see what where player\'s discs are' do
-      @board.drop_disc(0)
-      expect(@board.slot_owner(0, @board.height-1)).not_to be_nil
+      @board.add_disc(0)
+      expect(@board.slot_owner(0, 6)).not_to be_nil
     end
 
     it 'should track most recent moves' do
-      @board.drop_disc(0)
-      expect(@board.last_disc).not_to be_nil
+      @board.add_disc(0)
+      expect(Disc.last).to be_instance_of(Disc)
     end
 
     it 'should put a disc in the bottom row' do
-      @board.drop_disc(0)
-      expect(@board.slot_owner(0, @board.height-1).class).to be_truthy
+      @board.add_disc(0)
+      expect(@board.slot_owner(0, 6)).not_to be_nil
     end
 
     it 'should find the second-to-last row after one drop' do
-      @board.drop_disc(0)
-      expect(@board.find_bottom_row(0)).to eq(5)
+      @board.add_disc(0)
+      expect(@board.find_open_row(0)).to eq(5)
     end
 
     it 'should not put a disc in a full column' do
-      @board.height.times do
-        @board.drop_disc(0)
+      7.times do
+        @board.add_disc(0)
       end
-      expect(@board.drop_disc(0)).to be_nil
+      expect(@board.add_disc(0)).to be_nil
     end
 
     it 'should record how many discs have been dropped' do
-      @board.drop_disc(0)
-      expect(@board.count).not_to eq(0)
+      @board.add_disc(0)
+      expect(Disc.count).not_to eq(0)
     end
 
     it 'should declare a players win' do
-      @board.drop_disc(0)
-      @board.drop_disc(0)
-      @board.drop_disc(1)
-      @board.drop_disc(1)
-      @board.drop_disc(2)
-      @board.drop_disc(2)
-      @board.drop_disc(3)
-      @board.drop_disc(3)
+      @board.add_disc(0)
+      @board.add_disc(0)
+      @board.add_disc(1)
+      @board.add_disc(1)
+      @board.add_disc(2)
+      @board.add_disc(2)
+      @board.add_disc(3)
+      @board.add_disc(3)
       expect(@board.check_game_over).not_to eq(:tie)
       expect(@board.check_game_over).not_to be_falsey
     end

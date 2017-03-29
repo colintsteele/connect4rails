@@ -23,7 +23,7 @@ class Player < ActiveRecord::Base
   end
 
   def count_owned_adjacent(direction, column, row, count=0)
-    row += Math.sin(direction).round
+    row -= Math.sin(direction).round
     column += Math.cos(direction).round
     if has_disc?(column, row)
       count_owned_adjacent(direction, column, row, count + 1)
